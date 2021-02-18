@@ -1,4 +1,5 @@
 import { SNAKE_SPEED, update as updateSnake, draw as drawSnake, getSnakeHead, selfCollision as snakeSelfCollision } from './snake/index.js'
+import { getInputDirection } from  './snake/input.js';
 import { draw as drawFood, update as updateFood } from './food/index.js'
 import { gameboard, isOutsideBoard } from './board/index.js';
 
@@ -29,15 +30,15 @@ function main(currentTime) {
 }
 
 function update() {
-  updateSnake();
+  updateSnake(getInputDirection());
   updateFood();
   checkGameOver();
 }
 
 function draw() {
   gameboard.innerHTML = '';
-  drawSnake(gameboard);
   drawFood(gameboard);
+  drawSnake(gameboard);
 }
 
 function checkGameOver() {
