@@ -1,28 +1,26 @@
 import { equalPositions } from './auxiliar.js';
-import { getInputDirection } from './input.js';
  
 export const SNAKE_SPEED = 5;
 
 let newSegments = 0;
 
-const snakeBody = [
+let snakeBody = [
   {x: 11, y: 11},
 ]
 
-export function update() {
-  addSegments();
+export function update(inputDirection) {
 
-  const inputDirection = getInputDirection();
-
-  // fazer as outras partes da cobra andarem
-  for (let i = snakeBody.length - 2; i >= 0; i--) {
-    snakeBody[i + 1] = { ...snakeBody[i] }
+  if(inputDirection.x === 0 && inputDirection.y === 0) {
+    return;
   }
-
-  // fazer a cabeça andar
-  snakeBody[0].x += inputDirection.x;
-  snakeBody[0].y += inputDirection.y;
+  const newHead = {
+    x: getSnakeHead().x + inputDirection.x,
+    y: getSnakeHead().y + inputDirection.y
+  }
   
+  const newSnakeBody = newSegments === 0 ? snakeBody.slice(0, snakeBody.length - 1) : [...snakeBody]
+  snakeBody = [newHead].concat(newSnakeBody)
+  newSegments = 0
 };
 
 export function draw(gameboard) {
@@ -50,16 +48,6 @@ export function collision(position) {
 // functions to expand snake
 export function expandSnake(amount) {
   newSegments += amount;
-}
-
-function addSegments() {
-  if (newSegments > 0) {
-    snakeBody.push({ 
-      ...snakeBody[snakeBody.length - 1]
-    });
-    
-    newSegments -= 1;
-  }  
 }
 
 // external functions
